@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport"
         content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>云霄语音卡</title>
+    <title>云霄霄霄语音卡</title>
     <style>
         @keyframes rotate {
             from {
@@ -18,24 +18,21 @@
 
         :root {
             --vh: 1vh;
-            /* 基础尺寸变量（已放大25%） */
-            --lyrics-image-max-width: clamp(15rem, 100vw, 25rem);
-            --header-logo-size: clamp(7.5rem, 50vw, 12.5rem);
-            --text-logo-size: clamp(7.5rem, 50vw, 12.5rem);
-            --cover-size: clamp(15rem, 37.5vh, 25.9375rem);
-            --lyrics-height: clamp(6.25rem, 15vh, 15rem);
-            --panel-padding: clamp(0.625rem, 3.75vw, 1.25rem);
-            --controls-gap: clamp(0.625rem, 5vw, 1.953125rem);
-            --control-btn-size: clamp(3.125rem, 10vw, 4.296875rem);
-            --speed-btn-size: clamp(2.5rem, 7.5vw, 3.125rem);
-            --decorate-width: 3.125rem;
-            --decorate-height: 11.71875rem;
-            --decorate-position-x: -1.171875rem;
-            --decorate-position-y: -1.171875rem;
-            
-            /* 偏移量：PC端保持原有设置 */
-            --lyrics-offset: 20%; /* 文字切图区域垂直偏移 */
-            --panel-offset: -5%; /* 控制面板偏移 */
+            /* 歌词图片尺寸 */
+            --lyrics-image-max-width: clamp(12rem, 80vw, 20rem);
+            /* 头部logo尺寸设为歌词图片的一半 */
+            --header-logo-size: clamp(6rem, 40vw, 10rem); /* 歌词图片的50% */
+            --text-logo-size: clamp(6rem, 40vw, 10rem);  /* 歌词图片的50% */
+            --cover-size: clamp(12rem, 30vh, 20.75rem);
+            --lyrics-height: clamp(5rem, 12vh, 12rem);
+            --panel-padding: clamp(0.5rem, 3vw, 1rem);
+            --controls-gap: clamp(0.5rem, 4vw, 1.5625rem);
+            --control-btn-size: clamp(2.5rem, 8vw, 3.4375rem);
+            --speed-btn-size: clamp(2rem, 6vw, 2.5rem);
+            /* 歌词图片向下调整的偏移量，约两行文本高度 */
+            --lyrics-offset: 20%;
+            /* 底部控制面板上移距离（约三行高度） */
+            --panel-offset: 8%;
         }
 
         * {
@@ -58,26 +55,26 @@
             justify-content: center;
             font-family: 'Microsoft YaHei', Arial, sans-serif;
             overflow: hidden;
-            padding: 0.625rem;
+            padding: 0.5rem;
             box-sizing: border-box;
         }
 
         .header-logo {
             width: var(--header-logo-size);
             height: auto;
-            margin-bottom: clamp(0.625rem, 2.5vh, 1.25rem);
+            margin-bottom: clamp(0.5rem, 2vh, 1rem);
         }
 
         .text-logo {
             width: var(--text-logo-size);
             height: auto;
-            margin-bottom: clamp(1.25rem, 3.75vh, 2.5rem);
+            margin-bottom: clamp(1rem, 3vh, 2rem);
         }
 
         .audio-player {
             position: relative;
             width: 100%;
-            max-width: min(90vw, 31.25rem);
+            max-width: min(90vw, 25rem);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
@@ -85,7 +82,7 @@
             position: relative;
             width: var(--cover-size);
             height: var(--cover-size);
-            margin: 0 auto clamp(1.25rem, 3.75vh, 2.5rem);
+            margin: 0 auto clamp(1rem, 3vh, 2rem);
         }
 
         .cover-box {
@@ -96,7 +93,7 @@
             background-repeat: no-repeat;
             background-position: center;
             position: relative;
-            filter: drop-shadow(0 0.3125rem 0.625rem rgba(0, 0, 0, 0.3));
+            filter: drop-shadow(0 0.25rem 0.5rem rgba(0, 0, 0, 0.3));
         }
 
         .cover {
@@ -112,19 +109,20 @@
             background-position: center;
             animation: rotate 12s linear infinite;
             animation-play-state: paused;
-            box-shadow: 0 0.3125rem 0.9375rem rgba(0, 0, 0, 0.4);
+            box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.4);
         }
 
         .cover.playing {
             animation-play-state: running;
         }
 
+
         .decorate {
             position: absolute;
-            top: var(--decorate-position-y);
-            right: var(--decorate-position-x);
-            width: var(--decorate-width);
-            height: var(--decorate-height);
+            top: -0.9375rem;
+            right: -0.9375rem;
+            width: 2.5rem;
+            height: 9.375rem;
             background-image: url('./images/decorate.png');
             background-size: contain;
             background-repeat: no-repeat;
@@ -132,21 +130,28 @@
         }
 
         @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-0.390625rem); }
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-0.3125rem);
+            }
         }
 
         .lyrics-container {
             width: 100%;
-            max-width: min(31.25rem, 90vw);
-            margin: 0 auto clamp(1.25rem, 3.75vh, 2.5rem);
-            padding: 0 1.25rem;
+            max-width: min(25rem, 90vw);
+            margin: 0 auto clamp(1rem, 3vh, 2rem);
+            padding: 0 1rem;
             display: flex;
             flex-direction: column;
             align-items: center;
             position: relative;
             height: var(--lyrics-height);
-            margin-bottom: 6.25rem; /* 底部间距 */
+            margin-bottom: 5rem;
         }
 
         .lyrics-image {
@@ -154,7 +159,7 @@
             max-width: var(--lyrics-image-max-width);
             height: auto;
             position: absolute;
-            /* 核心定位：通过lyrics-offset控制垂直位置 */
+            /* 调整图片位置，向下移动约两行文本高度 */
             top: calc(50% + var(--lyrics-offset));
             left: 50%;
             transform: translate(-50%, -50%);
@@ -180,6 +185,7 @@
                 opacity: 0;
                 transform: translate(-50%, -50%) translateY(100%);
             }
+
             to {
                 opacity: 1;
                 transform: translate(-50%, -50%) translateY(0);
@@ -191,6 +197,7 @@
                 opacity: 1;
                 transform: translate(-50%, -50%) translateY(0);
             }
+
             to {
                 opacity: 0;
                 transform: translate(-50%, -50%) translateY(-100%);
@@ -199,14 +206,15 @@
 
         .bottom-control-panel {
             position: fixed;
-            bottom: calc(max(1.25rem, env(safe-area-inset-bottom)) + var(--panel-offset));
+            /* 底部控制面板上移约三行高度 */
+            bottom: calc(max(1rem, env(safe-area-inset-bottom)) + var(--panel-offset));
             left: 50%;
             transform: translateX(-50%);
             width: 95%;
-            max-width: min(31.25rem, 95vw);
+            max-width: min(25rem, 95vw);
             padding: var(--panel-padding);
             z-index: 1000;
-            border-radius: 1.25rem;
+            border-radius: 1rem;
         }
 
         .controls {
@@ -214,7 +222,7 @@
             justify-content: center;
             align-items: center;
             gap: var(--controls-gap);
-            margin-bottom: 0.625rem;
+            margin-bottom: 0.5rem;
         }
 
         .control-btn {
@@ -258,10 +266,10 @@
 
         .progress-container {
             width: 100%;
-            height: clamp(0.3125rem, 1.25vw, 0.625rem);
+            height: clamp(0.25rem, 1vw, 0.5rem);
             background: rgb(255, 255, 255);
-            border-radius: 0.3125rem;
-            margin-bottom: 0.625rem;
+            border-radius: 0.25rem;
+            margin-bottom: 0.5rem;
             cursor: pointer;
             position: relative;
             overflow: hidden;
@@ -270,7 +278,7 @@
         .progress-bar {
             height: 100%;
             background: #a7b6c2;
-            border-radius: 0.3125rem;
+            border-radius: 0.25rem;
             width: 0%;
             transition: width 0.1s ease;
         }
@@ -279,65 +287,28 @@
             display: flex;
             justify-content: space-between;
             color: #a7b6c2;
-            font-size: clamp(0.9375rem, 2.5vw, 1.015625rem);
+            font-size: clamp(0.75rem, 2vw, 0.8125rem);
             font-weight: 500;
         }
 
-        /* 手机端专项适配 */
-        @media (max-width: 768px) {
+        /* 小屏幕适配调整 */
+        @media (max-height: 700px) and (max-width: 480px) {
             :root {
-                /* 手机端面板位置调整 */
-                --panel-offset: 8%;
-                
-                /* 文字切图区域上移约2行：减小lyrics-offset正值 */
-                --lyrics-offset: 5%; /* 原20% → 5%，向上移动约2行高度 */
-                
-                /* 手机端元素尺寸（保持25%放大） */
-                --header-logo-size: clamp(6.25rem, 45vw, 11.25rem);
-                --text-logo-size: clamp(6.25rem, 45vw, 11.25rem);
-                --cover-size: clamp(12.5rem, 60vw, 18.75rem);
-                --lyrics-height: clamp(5rem, 20vh, 8.75rem);
-                --control-btn-size: clamp(3.125rem, 15vw, 4.375rem);
-                --speed-btn-size: clamp(2.5rem, 12vw, 3.4375rem);
-                
-                /* 手机端间距优化 */
-                --panel-padding: clamp(0.75rem, 5vw, 1.25rem);
-                --controls-gap: clamp(0.9375rem, 7vw, 1.875rem);
+                --header-logo-size: clamp(5rem, 35vw, 9rem);
+                --text-logo-size: clamp(5rem, 35vw, 9rem);
+                --cover-size: 10rem;
+                --lyrics-height: 4rem;
+                --control-btn-size: 2.5rem;
+                --speed-btn-size: 2rem;
+                --lyrics-offset: 16%; /* 小屏幕适当减少偏移量 */
+                --panel-offset: 6%; /* 小屏幕适当减少上移距离 */
             }
 
-            /* 文字切图区域底部间距减小，辅助上移效果 */
-            .lyrics-container {
-                margin-bottom: clamp(2.5rem, 10vh, 5rem); /* 原3.75rem+ → 减小底部间距 */
-            }
-            
-            /* 其他手机端优化 */
             .header-logo,
             .text-logo,
-            .cover-container {
-                margin-bottom: clamp(0.9375rem, 4vh, 1.5625rem);
-            }
-            
-            .progress-container {
-                height: clamp(0.375rem, 1.5vw, 0.625rem);
-                margin-bottom: 0.75rem;
-            }
-            
-            .time-display {
-                font-size: clamp(0.875rem, 3vw, 1rem);
-            }
-        }
-
-        /* 小屏手机额外适配 */
-        @media (max-width: 375px) {
-            :root {
-                --panel-offset: 6%;
-                --cover-size: clamp(10rem, 55vw, 15.625rem);
-                --control-btn-size: clamp(2.8125rem, 14vw, 3.75rem);
-                --lyrics-offset: 3%; /* 更小屏幕进一步上移 */
-            }
-            
+            .cover-container,
             .lyrics-container {
-                margin-bottom: clamp(1.875rem, 8vh, 4.375rem);
+                margin-bottom: 0.5rem;
             }
         }
     </style>
@@ -358,6 +329,7 @@
 
     <!-- 文字切图区域 -->
     <div class="lyrics-container" id="lyricsContainer">
+        <!-- 添加初始图片作为默认显示 -->
         <img src="./images/songs-1.png" alt="初始封面" class="lyrics-image active" data-index="-1">
         <img src="./images/song/1.png" alt="哈喽，你好呀，好久不见" class="lyrics-image" data-index="0">
         <img src="./images/song/2.png" alt="我是浴见品质代言人李云霄" class="lyrics-image" data-index="1">
@@ -375,7 +347,7 @@
         </div>
         <div class="time-display">
             <span id="currentTime">00:00</span>
-            <span id="speedDisplay" style="display: none; font-size: 0.859375rem; opacity: 0.7;">1.0x</span>
+            <span id="speedDisplay" style="display: none; font-size: 0.6875rem; opacity: 0.7;">1.0x</span>
             <span id="totalTime">00:00</span>
         </div>
         <div class="controls">
@@ -418,9 +390,9 @@
                 this.isPlaying = false;
                 this.currentSpeed = 1.0;
                 this.isDragging = false;
-                this.currentLyricsIndex = -1;
+                this.currentLyricsIndex = -1; // 初始显示index为-1的默认图片
                 this.lyricsTimings = [];
-                this.hasSwitchedFromInitial = false;
+                this.hasSwitchedFromInitial = false; // 标记是否已从初始图片切换
 
                 this.initializeEventListeners();
                 this.checkAudioSource();
@@ -439,6 +411,7 @@
                 this.audioPlayer.addEventListener('loadedmetadata', () => this.updateTotalTime());
                 this.audioPlayer.addEventListener('timeupdate', () => {
                     this.updateProgress();
+                    // 只有播放状态下才更新歌词
                     if (this.isPlaying) {
                         this.updateLyrics();
                     }
@@ -462,6 +435,7 @@
                 this.isPlaying = true;
                 this.playPauseBtn.className = 'control-btn pause-btn';
                 this.coverImage.classList.add('playing');
+                // 播放时检查是否需要从初始图片开始切换
                 this.updateLyrics();
             }
 
@@ -577,7 +551,9 @@
                 }
             }
 
+            // 初始化歌词时间点
             initializeLyricsTimings() {
+                // 默认时间点（包含初始图片切换点）
                 this.lyricsTimings = [0, 25, 50, 75, 100, 125, 150];
 
                 this.audioPlayer.addEventListener('loadedmetadata', () => {
@@ -603,12 +579,14 @@
                 });
             }
 
+            // 更新歌词显示
             updateLyrics() {
                 if (this.lyricsTimings.length === 0) return;
 
                 const currentTime = this.audioPlayer.currentTime;
                 let targetIndex = 0;
 
+                // 查找当前时间对应的歌词索引
                 for (let i = this.lyricsTimings.length - 1; i >= 0; i--) {
                     if (currentTime >= this.lyricsTimings[i]) {
                         targetIndex = i;
@@ -616,36 +594,43 @@
                     }
                 }
 
+                // 如果是初始状态（显示默认图片），播放后直接切换到第一个歌词
                 if (this.currentLyricsIndex === -1 && this.isPlaying) {
                     this.switchLyricsImage(0);
                     this.hasSwitchedFromInitial = true;
                     return;
                 }
 
+                // 正常切换歌词
                 if (targetIndex !== this.currentLyricsIndex && this.hasSwitchedFromInitial) {
                     this.switchLyricsImage(targetIndex);
                 }
             }
 
+            // 切换歌词图片
             switchLyricsImage(newIndex) {
-                if (newIndex < 0 || newIndex >= this.lyricsImages.length - 1) return;
+                if (newIndex < 0 || newIndex >= this.lyricsImages.length - 1) return; // 减去1是因为包含了初始图片
 
-                const currentImage = this.lyricsImages[this.currentLyricsIndex + 1];
+                const currentImage = this.lyricsImages[this.currentLyricsIndex + 1]; // +1是因为初始图片在第一位
                 const newImage = this.lyricsImages[newIndex + 1];
 
+                // 移除当前图片的active类，添加淡出动画
                 if (currentImage) {
                     currentImage.classList.remove('active', 'scroll-up-in');
                     currentImage.classList.add('scroll-up-out');
                     
+                    // 清理动画类
                     setTimeout(() => {
                         currentImage.classList.remove('scroll-up-out');
                     }, 800);
                 }
 
+                // 延迟显示新图片，创建平滑过渡效果
                 setTimeout(() => {
                     newImage.classList.remove('scroll-up-out');
                     newImage.classList.add('active', 'scroll-up-in');
                     
+                    // 清理动画类
                     setTimeout(() => {
                         newImage.classList.remove('scroll-up-in');
                     }, 800);
@@ -654,9 +639,11 @@
                 this.currentLyricsIndex = newIndex;
             }
 
+            // 重置歌词到初始状态
             resetLyrics() {
                 this.lyricsImages.forEach((img, index) => {
                     img.classList.remove('active', 'scroll-up-in', 'scroll-up-out');
+                    // 重置时显示初始图片
                     if (index === 0) {
                         img.classList.add('active');
                     }
@@ -666,6 +653,7 @@
             }
         }
 
+        // 初始化播放器
         document.addEventListener('DOMContentLoaded', () => {
             new AudioPlayerController();
         });
@@ -673,4 +661,3 @@
 </body>
 
 </html>
-    
