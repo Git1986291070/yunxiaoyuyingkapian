@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>云霄语音卡</title>
+  
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>云霄语音卡</title>
     <style>
         @keyframes rotate {
             from { transform: translate(-50%, -50%) rotate(0deg); }
@@ -166,8 +171,6 @@
             padding: var(--panel-padding);
             z-index: 1000;
             border-radius: 1rem;
-            background-color: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
         }
         .controls {
             display: flex;
@@ -233,7 +236,37 @@
             font-weight: 500;
         }
         
-        /* 媒体查询优化 - 覆盖更多设备尺寸 */
+        /* 增强的响应式设计 - 添加更多断点 */
+        /* 小屏幕手机 */
+        @media (max-width: 320px) {
+            :root {
+                --header-logo-size: clamp(5rem, 40vw, 8rem);
+                --text-logo-size: clamp(5rem, 40vw, 8rem);
+                --cover-size: clamp(10rem, 30vh, 15rem);
+                --lyrics-height: clamp(4rem, 10vh, 8rem);
+                --panel-offset: 5%;
+            }
+        }
+        
+        /* 中等屏幕手机 */
+        @media (min-width: 321px) and (max-width: 375px) {
+            :root {
+                --header-logo-size: clamp(5.5rem, 42vw, 9rem);
+                --text-logo-size: clamp(5.5rem, 42vw, 9rem);
+                --cover-size: clamp(11rem, 32vh, 18rem);
+            }
+        }
+        
+        /* 大屏幕手机 */
+        @media (min-width: 376px) and (max-width: 480px) {
+            :root {
+                --header-logo-size: clamp(6rem, 44vw, 10rem);
+                --text-logo-size: clamp(6rem, 44vw, 10rem);
+                --cover-size: clamp(12rem, 34vh, 20rem);
+            }
+        }
+        
+        /* 原有媒体查询优化 */
         @media (max-height: 700px) and (max-width: 480px) {
             :root {
                 --header-logo-size: clamp(5.5rem, 38.5vw, 9.9rem);
@@ -254,65 +287,38 @@
             }
         }
         
-        /* 小屏手机适配 */
-        @media (max-width: 320px) {
-            :root {
-                --header-logo-size: clamp(4.5rem, 35vw, 9rem);
-                --text-logo-size: clamp(4.5rem, 35vw, 9rem);
-                --cover-size: clamp(10rem, 30vh, 18rem);
-                --lyrics-height: 3.5rem;
-                --panel-offset: 5%;
-            }
-        }
-        
-        /* 大屏手机和小平板适配 */
-        @media (min-width: 481px) and (max-width: 768px) {
-            :root {
-                --header-logo-size: clamp(7rem, 40vw, 12rem);
-                --text-logo-size: clamp(7rem, 40vw, 12rem);
-                --cover-size: clamp(15rem, 40vh, 25rem);
-                --lyrics-height: 6rem;
-                --panel-offset: 7%;
-            }
-        }
-        
-        /* 平板和大屏设备适配 */
-        @media (min-width: 769px) {
-            :root {
-                --header-logo-size: clamp(8rem, 25vw, 15rem);
-                --text-logo-size: clamp(8rem, 25vw, 15rem);
-                --cover-size: clamp(18rem, 30vh, 30rem);
-                --lyrics-height: 8rem;
-                --panel-offset: 5%;
-            }
-        }
-        
-        /* 横屏模式适配 */
+        /* 横屏模式优化 */
         @media (orientation: landscape) {
             :root {
-                --header-logo-size: clamp(4rem, 15vw, 8rem);
-                --text-logo-size: clamp(4rem, 15vw, 8rem);
-                --cover-size: clamp(10rem, 25vh, 18rem);
-                --lyrics-height: clamp(3rem, 10vh, 6rem);
+                --header-logo-size: clamp(4rem, 20vw, 7rem);
+                --text-logo-size: clamp(4rem, 20vw, 7rem);
+                --cover-size: clamp(10rem, 50vh, 15rem);
+                --lyrics-height: clamp(6rem, 20vh, 10rem);
+                --lyrics-offset: 10%;
                 --panel-offset: 3%;
             }
             body {
                 flex-direction: row;
+                flex-wrap: wrap;
                 justify-content: space-around;
             }
             .header-logo, .text-logo {
+                width: 100%;
+                text-align: center;
                 transform: translateY(0);
                 margin-bottom: 0.5rem;
             }
-            .audio-player {
-                max-width: 40vw;
+            .audio-player, .lyrics-container {
+                width: 45%;
+                max-width: none;
             }
-            .lyrics-container {
-                max-width: 40vw;
-                margin-bottom: 0;
+            .bottom-control-panel {
+                width: 90%;
             }
         }
     </style>
+</head>
+
 </head>
 <body>
     <img src="./images/header-logo.png" alt="云霄语音卡" class="header-logo">
@@ -353,32 +359,13 @@
         <source src="./bgm/bgm.MP3" type="audio/mpeg">
     </audio>
     <script>
-        // 增强的视口高度设置函数
         function setVhUnit() {
-            // 计算真实视口高度
             let vh = window.innerHeight * 0.01;
             document.documentElement.style.setProperty('--vh', `${vh}px`);
-
-            // 调整底部面板位置
-            const bottomPanel = document.querySelector('.bottom-control-panel');
-            if (bottomPanel) {
-                // 确保面板始终在安全区域内
-                const safeAreaInsetBottom = window.env ? window.env('safe-area-inset-bottom') : 0;
-                // 使用CSS变量而不是直接设置样式
-                document.documentElement.style.setProperty('--safe-area-inset-bottom', `${safeAreaInsetBottom}px`);
-            }
         }
-
-        // 监听更多事件以确保视口高度正确
         window.addEventListener('resize', setVhUnit);
         window.addEventListener('orientationchange', setVhUnit);
-        window.addEventListener('load', setVhUnit);
-        window.addEventListener('pageshow', setVhUnit);
-        window.addEventListener('scroll', setVhUnit); // 监听滚动事件，处理地址栏显示/隐藏
-
-        // 初始设置
         setVhUnit();
-
         class AudioPlayerController {
             constructor() {
                 this.audioPlayer = document.getElementById('audioPlayer');
