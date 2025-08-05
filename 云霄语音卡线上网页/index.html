@@ -33,9 +33,9 @@
             --decorate-position-x: -1.171875rem;
             --decorate-position-y: -1.171875rem;
             
-            /* 偏移量：PC端保持下调效果，手机端单独调整 */
-            --lyrics-offset: 20%;
-            --panel-offset: -5%; /* PC端位置 */
+            /* 偏移量：PC端保持原有设置 */
+            --lyrics-offset: 20%; /* 文字切图区域垂直偏移 */
+            --panel-offset: -5%; /* 控制面板偏移 */
         }
 
         * {
@@ -146,7 +146,7 @@
             align-items: center;
             position: relative;
             height: var(--lyrics-height);
-            margin-bottom: 6.25rem;
+            margin-bottom: 6.25rem; /* 底部间距 */
         }
 
         .lyrics-image {
@@ -154,6 +154,7 @@
             max-width: var(--lyrics-image-max-width);
             height: auto;
             position: absolute;
+            /* 核心定位：通过lyrics-offset控制垂直位置 */
             top: calc(50% + var(--lyrics-offset));
             left: 50%;
             transform: translate(-50%, -50%);
@@ -282,38 +283,40 @@
             font-weight: 500;
         }
 
-        /* 手机端专项适配（解决位置和放大问题） */
+        /* 手机端专项适配 */
         @media (max-width: 768px) {
             :root {
-                /* 手机端面板位置调整：从底部上移，避免过于靠底 */
+                /* 手机端面板位置调整 */
                 --panel-offset: 8%;
                 
-                /* 确保手机端元素按25%比例放大（精确计算） */
-                --header-logo-size: clamp(6.25rem, 45vw, 11.25rem); /* 原基础*1.25 */
-                --text-logo-size: clamp(6.25rem, 45vw, 11.25rem);
-                --cover-size: clamp(12.5rem, 60vw, 18.75rem); /* 原10rem*1.25=12.5rem */
-                --lyrics-height: clamp(5rem, 20vh, 8.75rem); /* 原4rem*1.25=5rem */
-                --control-btn-size: clamp(3.125rem, 15vw, 4.375rem); /* 原2.5rem*1.25=3.125rem */
-                --speed-btn-size: clamp(2.5rem, 12vw, 3.4375rem); /* 原2rem*1.25=2.5rem */
-                --lyrics-offset: 12%;
+                /* 文字切图区域上移约2行：减小lyrics-offset正值 */
+                --lyrics-offset: 5%; /* 原20% → 5%，向上移动约2行高度 */
                 
-                /* 手机端间距按比例调整 */
+                /* 手机端元素尺寸（保持25%放大） */
+                --header-logo-size: clamp(6.25rem, 45vw, 11.25rem);
+                --text-logo-size: clamp(6.25rem, 45vw, 11.25rem);
+                --cover-size: clamp(12.5rem, 60vw, 18.75rem);
+                --lyrics-height: clamp(5rem, 20vh, 8.75rem);
+                --control-btn-size: clamp(3.125rem, 15vw, 4.375rem);
+                --speed-btn-size: clamp(2.5rem, 12vw, 3.4375rem);
+                
+                /* 手机端间距优化 */
                 --panel-padding: clamp(0.75rem, 5vw, 1.25rem);
                 --controls-gap: clamp(0.9375rem, 7vw, 1.875rem);
             }
 
-            /* 手机端元素间距优化 */
+            /* 文字切图区域底部间距减小，辅助上移效果 */
+            .lyrics-container {
+                margin-bottom: clamp(2.5rem, 10vh, 5rem); /* 原3.75rem+ → 减小底部间距 */
+            }
+            
+            /* 其他手机端优化 */
             .header-logo,
             .text-logo,
             .cover-container {
                 margin-bottom: clamp(0.9375rem, 4vh, 1.5625rem);
             }
             
-            .lyrics-container {
-                margin-bottom: clamp(3.75rem, 15vh, 6.25rem);
-            }
-            
-            /* 进度条和时间显示适配手机端 */
             .progress-container {
                 height: clamp(0.375rem, 1.5vw, 0.625rem);
                 margin-bottom: 0.75rem;
@@ -330,6 +333,11 @@
                 --panel-offset: 6%;
                 --cover-size: clamp(10rem, 55vw, 15.625rem);
                 --control-btn-size: clamp(2.8125rem, 14vw, 3.75rem);
+                --lyrics-offset: 3%; /* 更小屏幕进一步上移 */
+            }
+            
+            .lyrics-container {
+                margin-bottom: clamp(1.875rem, 8vh, 4.375rem);
             }
         }
     </style>
